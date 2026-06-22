@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KB Global One Team News</title>
+<style>
+:root{--gold:#FFBC00;--gold-dk:#E8A800;--gold-lt:#FFF8E0;--navy:#0E1E2D;--navy-lt:#162638;--navy-md:#1E3048;--ink:#0F1C2A;--body:#3A4A58;--muted:#6B7A8A;--pale:#9BAAB8;--paper:#F9F7F3;--card:#FFFFFF;--line:#E8E3DA;--warm:#F4F0E8;--blue:#EBF3FC;--blue-dk:#1A5EA8;--green:#EDF5F0;--green-dk:#1A7048;--purple:#F2EDFA;--purple-dk:#5C3EA0;--rose:#FBEFEC;--rose-dk:#A83028;--amber:#FBF5E4;--amber-dk:#8F6B12;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#DDD8CE;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1600px;margin:0 auto;background:var(--paper);box-shadow:0 0 60px rgba(0,0,0,.15);min-height:100vh}
+.topbar{height:5px;background:linear-gradient(90deg,var(--gold),var(--gold-dk),var(--gold))}
+header{background:var(--navy);color:#fff;padding:0}
+.hd-top{display:flex;align-items:center;justify-content:space-between;padding:18px 44px 0;gap:20px}
+.hd-brand{display:flex;align-items:baseline;gap:10px}
+.hd-logo{font:800 34px Georgia,serif;letter-spacing:-1.5px}
+.hd-logo em{color:var(--gold);font-style:normal}
+.hd-tag{font-size:11px;color:#7A9AB8;font-weight:600;letter-spacing:.06em;white-space:nowrap}
+.hd-right{display:flex;align-items:center;gap:16px}
+.lang-pill{display:flex;border:1.5px solid rgba(255,255,255,.18);border-radius:20px;overflow:hidden}
+.lang-pill button{background:0;border:0;color:rgba(255,255,255,.55);font-size:11px;font-weight:900;padding:5px 11px;cursor:pointer;transition:all .2s}
+.lang-pill button.on{background:var(--gold);color:var(--navy);border-radius:18px}
+.hd-meta{font-size:11px;color:#7A9AB8;text-align:right;line-height:1.65}
+.hd-meta b{color:#C8D8E8}
+.clock-strip{display:flex;overflow-x:auto;padding:10px 44px;border-top:1px solid rgba(255,255,255,.06);gap:0;scrollbar-width:none}
+.clock-strip::-webkit-scrollbar{display:none}
+.clk{flex-shrink:0;display:flex;align-items:center;gap:7px;padding:6px 14px 6px 0;border-right:1px solid rgba(255,255,255,.08);margin-right:14px}
+.clk:last-child{border-right:0}
+.clk-flag{font-size:14px}
+.clk-city{font-size:9px;font-weight:700;color:#7A9AB8;letter-spacing:.08em;display:block}
+.clk-time{font-size:14px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;display:block}
+.clk.sub .clk-time{color:var(--gold)}
+.pulse-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 44px}
+.pulse-card{border-radius:10px;padding:10px 13px;border:1px solid rgba(255,255,255,.08);transition:all .2s;display:flex;align-items:center;gap:12px}
+.pulse-card:hover{border-color:rgba(255,188,0,.35)}
+.pc-icon{font-size:24px}
+.pc-label{font-size:12px;font-weight:800;color:var(--gold);letter-spacing:.02em;margin-bottom:2px}
+.pc-sub{font-size:11px;color:#fff;line-height:1.4}
+.main-nav{display:flex;gap:4px;padding:14px 44px;overflow-x:auto;scrollbar-width:none}
+.main-nav::-webkit-scrollbar{display:none}
+.main-nav button{background:0;border:0;border-bottom:3px solid transparent;padding:10px 16px;color:rgba(255,255,255,.48);font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap;transition:all .2s;border-radius:8px 8px 0 0}
+.main-nav button:hover{color:rgba(255,255,255,.8)}
+.main-nav button.active{background:rgba(255,188,0,.12);border-bottom-color:var(--gold);color:#fff}
+.ticker{background:var(--navy-lt);border-top:1px solid rgba(255,255,255,.06);height:36px;overflow:hidden;position:relative}
+.ticker-inner{position:absolute;display:inline-flex;animation:ticker 55s linear infinite}
+.ticker:hover .ticker-inner{animation-play-state:paused}
+.ticker-item{padding:8px 22px;font-size:11.5px;color:rgba(255,255,255,.7);border-right:1px solid rgba(255,255,255,.08);white-space:nowrap;display:flex;align-items:center;gap:7px}
+.ticker-item b{color:var(--gold);font-size:10px;letter-spacing:.08em}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.page{display:none}
+.page.active{display:block}
+main{padding:36px 44px 60px}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;border-radius:18px;overflow:hidden;background:var(--navy);margin-bottom:30px;box-shadow:0 8px 40px rgba(14,30,45,.18)}
+.hero-main{padding:32px 34px}
+.hero-label{font-size:10px;font-weight:900;letter-spacing:.18em;color:var(--gold);margin-bottom:10px}
+.hero-h{font:800 24px Georgia,serif;line-height:1.4;color:#fff;letter-spacing:-.5px;margin-bottom:12px}
+.hero-p{font-size:13.5px;line-height:1.72;color:#A8BDD0}
+.hero-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}
+.chip{border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:4px 10px;font-size:11px;color:rgba(255,255,255,.7)}
+.hero-focus{padding:32px 30px;border-left:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.12);display:flex;flex-direction:column;justify-content:center}
+.hero-focus-label{font-size:9px;font-weight:900;letter-spacing:.18em;color:var(--gold);margin-bottom:12px}
+.hero-focus p{font-size:13px;line-height:1.75;color:#B8CDD8;margin:0}
+.hero-focus p b{color:var(--gold)}
+.bignum{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px}
+.bn-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;box-shadow:0 2px 16px rgba(14,30,45,.06);position:relative;overflow:hidden;transition:transform .2s}
+.bn-card:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(14,30,45,.1)}
+.bn-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--gold),var(--gold-dk))}
+.bn-card.navy::before{background:linear-gradient(180deg,#2A5298,var(--navy))}
+.bn-eye{font-size:10px;font-weight:900;letter-spacing:.14em;color:var(--muted);margin-bottom:10px}
+.bn-num{font:900 48px Georgia,serif;line-height:1;color:var(--navy);margin-bottom:4px}
+.bn-desc{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.bn-ctx{font-size:12px;color:var(--body);line-height:1.6}
+.sh{display:flex;align-items:flex-end;justify-content:space-between;margin:30px 0 14px}
+.sh h2{font:800 22px Georgia,serif;letter-spacing:-.6px}
+.sh .note{font-size:12px;color:var(--muted)}
+.signals{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+.signal{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 2px 16px rgba(14,30,45,.05);transition:all .2s;display:flex;flex-direction:column;cursor:pointer}
+.signal:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(14,30,45,.1);border-color:var(--gold-dk)}
+.sig-num{font:900 11px Georgia;color:var(--pale);margin-bottom:8px}
+.sig-h{font-size:15px;font-weight:800;line-height:1.38;margin:10px 0 7px}
+.sig-p{font-size:12px;line-height:1.58;color:var(--body);flex:1}
+.tag{display:inline-block;border-radius:5px;padding:3px 8px;font-size:10px;font-weight:900;white-space:nowrap}
+.t-econ{background:var(--blue);color:var(--blue-dk)}
+.t-fin{background:var(--green);color:var(--green-dk)}
+.t-risk{background:var(--rose);color:var(--rose-dk)}
+.t-digital{background:var(--purple);color:var(--purple-dk)}
+.t-esg{background:var(--amber);color:var(--amber-dk)}
+.twocol{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-bottom:30px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 2px 16px rgba(14,30,45,.05)}
+.panel h2{font:800 18px Georgia,serif;margin-bottom:16px}
+.trend+.trend{border-top:1px solid #EEE9E0;padding-top:13px;margin-top:13px}
+.trend b{font-size:14px;color:var(--ink);display:block;margin-bottom:5px}
+.trend span{font-size:12.5px;color:var(--body);line-height:1.62}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi-cell{background:var(--warm);border:1px solid var(--line);border-radius:11px;padding:14px}
+.kpi-cell b{font:900 24px Georgia;color:#8A6310;display:block;margin-bottom:3px}
+.kpi-cell span{font-size:11.5px;color:var(--body);line-height:1.5}
+.reporter{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.reporter::-webkit-scrollbar{display:none}
+.rep-card{flex-shrink:0;width:240px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;border-left:4px solid var(--gold);box-shadow:0 2px 12px rgba(14,30,45,.05)}
+.rep-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.rep-flag{font-size:18px}
+.rep-loc{font-size:11px;font-weight:800;color:var(--ink)}
+.rep-time{font-size:10px;color:var(--muted);margin-left:auto}
+.rep-quote{font-size:12px;line-height:1.65;color:var(--body);font-style:italic;margin:0}
+.footer{border-top:1px solid var(--line);padding:20px 44px 28px;font-size:11px;color:var(--muted);background:var(--warm)}
+
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(14,30,45,.85);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal.on{display:flex}
+.modal-box{background:#fff;border-radius:16px;padding:34px;width:100%;max-width:800px;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.modal-close{position:absolute;top:20px;right:24px;background:var(--warm);border:0;width:36px;height:36px;border-radius:50%;font-size:18px;font-weight:bold;cursor:pointer;color:var(--navy);transition:all .2s}
+.modal-close:hover{background:var(--line);color:#000}
+.modal h2{font:800 24px Georgia, serif;margin-bottom:12px;color:var(--navy);line-height:1.3}
+.modal-tag{display:inline-block;font-size:11px;font-weight:900;color:var(--gold-dk);background:var(--gold-lt);padding:4px 10px;border-radius:6px;margin-bottom:20px;}
+.modal-detail{background:#fff;font-size:14.5px;line-height:1.8;color:#222;margin-bottom:24px;}
+.modal-detail p{margin-bottom:14px; text-align: justify;}
+.modal-detail ul { margin-left: 20px; margin-bottom: 14px; }
+.modal-detail li { margin-bottom: 6px; }
+.modal-insight{background:var(--navy);color:#fff;border-left:5px solid var(--gold);padding:22px;border-radius:10px;margin:24px 0;font-size:14px;line-height:1.7;box-shadow: 0 4px 15px rgba(0,0,0,0.1);}
+.modal-insight-title{font-weight:900;color:var(--gold);margin-bottom:12px;font-size:16px;letter-spacing:0.05em;}
+.modal-insight p{margin-bottom:8px; opacity:0.95;}
+.sources-title{font-weight:800;margin:24px 0 12px;color:var(--navy); font-size:15px; border-top:1px solid var(--line); padding-top:20px;}
+.source-item{background:var(--warm);border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin:8px 0;transition:all .2s; display:flex; align-items:center; gap:10px;}
+.source-item:hover{background:#E8E3DA; border-color:#D0C9BA;}
+.source-item a{color:#1A5EA8;text-decoration:none;font-weight:800;font-size:12.5px;display:block;}
+.source-item a:hover{text-decoration:underline}
+.source-icon { font-size: 16px; }
+
+.subpage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;}
+.sp-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; cursor: pointer; transition: all .2s; display:flex; flex-direction:column; justify-content:space-between; }
+.sp-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(14,30,45,.08); border-color: var(--gold); }
+.sp-card h3 { font-size: 17px; margin-bottom: 10px; color: var(--navy); }
+.sp-card p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-top: 10px; }
+
+@media(max-width:1080px){header,main{padding-left:24px;padding-right:24px}.pulse-strip{padding:12px 24px}.clock-strip{padding:10px 24px}.main-nav{padding:14px 24px}.footer{padding:18px 24px}.hero,.twocol,.engage-grid{grid-template-columns:1fr}.hero-focus{border-top:1px solid rgba(255,255,255,.08);border-left:0}.signals{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.signals,.bignum,.kpi,.subpage-grid{grid-template-columns:1fr}.pulse-strip{grid-template-columns:1fr}}
+
+/* ===== Local Media Intelligence ===== */
+.media-hero{border-radius:16px;padding:26px 28px;color:#fff;background:radial-gradient(circle at 86% 18%,rgba(255,188,0,.13),transparent 25%),linear-gradient(135deg,#0E1E2D 0%,#172E43 100%);box-shadow:0 10px 30px rgba(14,30,45,.14)}
+.media-kicker{color:var(--gold);font-size:10px;font-weight:900;letter-spacing:.16em;margin-bottom:8px}.media-hero h2{font:800 25px Georgia,serif;letter-spacing:-.6px;margin-bottom:10px}.media-hero p{max-width:920px;color:#C4D2DE;font-size:13px;line-height:1.7}.media-rule{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:15px}.media-rule b{padding:4px 8px;border-radius:99px;background:rgba(255,188,0,.16);border:1px solid rgba(255,188,0,.3);color:var(--gold);font-size:9px;letter-spacing:.08em}.media-rule span{font-size:11px;font-weight:800;color:#EAF0F5}
+.media-filters{display:flex;gap:7px;flex-wrap:wrap;margin:20px 0 13px}.media-filters button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 12px;color:var(--muted);font-size:11px;font-weight:900;cursor:pointer}.media-filters button.active{border-color:var(--navy);background:var(--navy);color:#fff}
+.media-feed{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.media-article{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 2px 15px rgba(14,30,45,.05);display:flex;flex-direction:column}.media-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:var(--ink)}.media-top i{font-style:normal;font-size:9px;font-weight:900;color:var(--blue-dk);background:var(--blue);padding:4px 7px;border-radius:5px;white-space:nowrap}.media-source{display:flex;gap:5px;margin:10px 0 7px;font-size:10px;font-weight:800;color:var(--muted)}.media-article h3{font-size:15px;line-height:1.42;letter-spacing:-.3px;margin-bottom:8px;color:var(--navy)}.media-article>p{font-size:12px;line-height:1.64;color:var(--body);flex:1}.media-insight{margin-top:14px;padding:11px 12px;border-left:3px solid var(--gold);background:var(--gold-lt);border-radius:0 8px 8px 0}.media-insight b{display:block;font-size:10px;color:#8A6310;letter-spacing:.04em}.media-insight span{display:block;font-size:11.5px;color:#4C463A;line-height:1.55;margin-top:4px}.media-article>a{display:flex;justify-content:space-between;align-items:center;margin-top:14px;text-decoration:none;color:var(--blue-dk);font-size:11px;font-weight:900;border-top:1px solid var(--line);padding-top:11px}.media-article>a em{font-style:normal;font-size:14px}.media-empty{grid-column:1/-1;border:1px dashed #CFD7DF;background:#F6F9FC;border-radius:12px;padding:18px;color:var(--muted);font-size:12px;text-align:center}
+.coverage-head{margin:31px 0 14px}.coverage-head>span{font-size:10px;font-weight:900;color:var(--gold-dk);letter-spacing:.14em}.coverage-head h2{font:800 20px Georgia,serif;letter-spacing:-.5px;margin-top:5px}.coverage-head p{margin-top:6px;color:var(--muted);font-size:11.5px}.coverage-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.coverage-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px;min-height:140px;box-shadow:0 2px 10px rgba(14,30,45,.04);border-top:3px solid #9BAAB8}.coverage-card.on{border-top-color:var(--gold)}.coverage-card>div{display:flex;justify-content:space-between;align-items:center;gap:4px;font-size:12px}.coverage-card>div span{font-size:8px;font-weight:900;background:var(--warm);color:#7B6B55;border-radius:4px;padding:3px 5px;white-space:nowrap}.coverage-card.on>div span{background:var(--gold-lt);color:#8A6310}.coverage-card p{margin-top:8px;font-size:10px;line-height:1.42;color:var(--muted);min-height:29px}.coverage-card small{display:block;margin-top:10px;font-size:9px;font-weight:900;color:var(--gold-dk)}
+@media(max-width:1080px){.media-feed{grid-template-columns:repeat(2,1fr)}.coverage-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:640px){.media-hero{padding:20px 18px}.media-hero h2{font-size:21px}.media-feed{grid-template-columns:1fr}.coverage-grid{grid-template-columns:1fr 1fr}.media-filters{overflow-x:auto;flex-wrap:nowrap;padding-bottom:3px}.media-filters button{white-space:nowrap}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar"></div>
+<header>
+<div class="hd-top">
+<div class="hd-brand"><div class="hd-logo">Global<em>·</em>One Team</div><div class="hd-tag" id="hTagline"></div></div>
+<div class="hd-right">
+<div class="lang-pill"><button id="btnKo" class="on" onclick="setLang('ko')">KR</button><button id="btnEn" onclick="setLang('en')">EN</button></div>
+<div class="hd-meta"><b id="hDate"></b><br><span id="hSub"></span></div>
+</div>
+</div>
+<div class="clock-strip" id="clockStrip"></div>
+<div class="pulse-strip" id="pulseStrip"></div>
+<nav class="main-nav" id="mainNav"></nav>
+</header>
+<div class="ticker"><div class="ticker-inner" id="tickerInner"></div></div>
+<main>
+<section class="page active" id="page-brief"></section>
+<section class="page" id="page-countries"></section>
+<section class="page" id="page-subs"></section>
+<section class="page" id="page-topics"></section>
+<section class="page" id="page-regulations"></section>
+<section class="page" id="page-participation"></section>
+</main>
+<footer class="footer"><span id="footerText"></span></footer>
+</div>
+
+<div class="modal" id="modal">
+<div class="modal-box">
+<button class="modal-close" onclick="closeModal()">✕</button>
+<div class="modal-tag" id="modal-tag"></div>
+<h2 id="modal-title"></h2>
+<div id="modal-detail"></div>
+<div id="modal-insight"></div>
+<div class="sources-title">📌 심층 분석 원본 및 연관 리포트</div>
+<div id="modal-sources"></div>
+</div>
+</div>
+
+<script>
+let LANG='ko';
+const TODAY='2026-06-23';
+
+const TX={
+  ko:{
+    tagline:'KB GLOBAL INTELLIGENCE · ONE VISION CONNECTING FINANCIAL FLOWS',
+    date:'2026년 6월 23일',
+    sub:'공식자료 기반 작성 · 08:00 KST',
+    heroLabel:'주간 초점',
+    heroH:'엔화 146 시대의 도래 · 아시아 금융 재편 시작',
+    heroP:'일본은행(BOJ)의 명시적 금리 인상 신호로 엔화가 145선을 돌파하고 146대로 진입했습니다. 이는 글로벌 금리 체계의 대전환과 신흥국 금융에 급격한 변화를 초래하고 있습니다.',
+    heroChips:['BOJ 인상신호','JPY 급등','EM 신용 악화','ALM 재점검 필수'],
+    focusLabel:'KB 액션',
+    focusP:'① JPY 차입금 규모 긴급 재평가\n② 신흥국 거점별 신용 모니터링 강화\n③ ALM 전략 완전 재편\n④ 환헤징 비용 흡수 계획 수립',
+    bnEye:['이 주의 충격','이 주의 변수'],
+    bnDesc:['BI-Rate 5.75% ▲','Fed 기준금리 3.50-3.75%'],
+    bnCtx:['인도네시아 중앙은행의 연속 인상으로 현지 금리가 급상승하고 있으며, 루피아 약세 억제 노력이 진행 중입니다.','미국 연준의 기준금리 유지로 달러 강세가 지속되고 있으며, 신흥국으로부터의 자본 이탈이 가속화되고 있습니다.'],
+    sigHead:'4대 시장신호',
+    sigNote:'각 카드를 클릭하면 상세 심층 분석과 시사점을 확인할 수 있습니다.',
+    signals:[
+      {
+        n:'01', cat:'t-econ', label:'시장·경제', h:'BOJ 정책금리 인상 신호 강화', p:'엔화 145→146 급등으로 글로벌 금리 체계 재편 중',
+        detail: '<p>일본은행(BOJ)이 최근 금융정책결정회의에서 기준금리 인상 가능성을 강력히 시사했습니다. 기존 초완화적 통화정책(마이너스 금리 및 YCC)의 완전한 폐기 수순을 밟으며, 시장은 연내 최소 2차례의 추가 금리 인상을 기정사실화하고 있습니다.</p>',
+        insight: '<p><strong>[거점 공통]</strong> 엔화 기반 차입 비중이 높은 기업 및 국가의 이자 상환 부담이 급증할 것입니다.</p><p><strong>[본점 Action]</strong> 글로벌 자금 조달 포트폴리오에서 단기적으로 엔화 비중을 축소하고, 다변화된 통화 바스켓 전략을 즉각 도입해야 합니다.</p>',
+        sources: [{title: 'BOJ 6월 금융정책결정회의 요약본', url:'#'}]
+      },
+      {
+        n:'02', cat:'t-fin', label:'금융산업', h:'아시아 조달 환경 급변', p:'JPY 차입금 많은 신흥국에 직접적 부담',
+        detail: '<p>글로벌 채권 시장에서 아시아 신흥국(EM) 기업들의 외화 표시 채권 발행 조건이 급격히 악화되고 있습니다. 특히 인도네시아, 베트남 등은 조달 금리 상승과 자국 통화 가치 하락이라는 이중고를 겪고 있습니다.</p>',
+        insight: '<p><strong>[해외 영업점]</strong> 현지 진출 한국계 기업의 유동성 경색 가능성에 선제적으로 대비하여 여신 한도를 재점검해야 합니다.</p>',
+        sources: [{title: '아시아 신흥국 크레딧 시장 전망', url:'#'}]
+      },
+      {
+        n:'03', cat:'t-risk', label:'규제·리스크', h:'신흥국 통화·외채 압박 심화', p:'금리 상승 + 환율 악화 동시 진행',
+        detail: '<p>미국 연준(Fed)의 고금리 장기화 기조로 신흥국 시장에서 자본 이탈이 발생 중입니다. 인도네시아 중앙은행은 루피아화 방어를 위해 기준금리를 5.75%로 전격 인상했습니다.</p>',
+        insight: '<p><strong>[리스크 관리]</strong> 현지 법인의 씬파일러(Thin-filer) 및 한계 기업 위험노출액(Exposure)을 조기 감축하고 대손충당금 가이드를 상향해야 합니다.</p>',
+        sources: [{title: 'KB금융지주: 신흥국 외환위기 가능성 점검', url:'#'}]
+      },
+      {
+        n:'04', cat:'t-digital', label:'전략·운영', h:'자산·부채 구성 재점검 필수', p:'ALM 가정이 단기간 내 무효화 가능',
+        detail: '<p>이종 통화 간의 금리 민감도 급변, 예측을 벗어난 예금 인출 속도로 인해 기존의 리스크 측정 지표가 실제 위험을 현저히 과소평가하고 있습니다.</p>',
+        insight: '<p><strong>[본점/IT]</strong> 글로벌 전 거점 ALM 시스템 통합 스트레스 테스트를 즉시 재실시하고 비상 자금 조달 계획(CFP)을 완비해야 합니다.</p>',
+        sources: [{title: 'BCBS 유동성 리스크 관리 권고안', url:'#'}]
+      }
+    ],
+    countries: [
+      {
+        h:'동경지점 (Tokyo)', p:'BOJ 통화정책 정상화에 따른 도쿄 지점 영업 환경 변화 및 기회 요인',
+        detail:'<p>수십 년간 이어진 마이너스 금리 시대가 막을 내리면서, 도쿄 지점의 예대마진(NIM) 회복이 가시화되고 있습니다. 엔화 강세 전환으로 인해 파생상품 및 환헤지 수요가 급증하고 있습니다.</p>',
+        insight:'<p><strong>[동경 지점]</strong> 여신 마진 확대 기회를 적극 포착하되, 금리 상승으로 인한 한계 기업 부실화에 대비한 촘촘한 심사가 요구됩니다.</p>',
+        weather: { icon: '⛅', temp: '26°C' }
+      },
+      {
+        h:'뉴욕지점 (New York)', p:'연준(Fed) 고금리 기조에 따른 뉴욕 지점 조달 및 상업용 부동산(CRE) 리스크 점검',
+        detail:'<p>미국 연준의 고금리 유지로 인해 뉴욕 지점의 달러 자금 조달(Funding) 비용이 고공행진을 이어가고 있습니다. 또한, 재택근무 고착화 및 고금리로 인한 미국 상업용 부동산(CRE) 시장의 침체가 지속되면서 관련 여신 포트폴리오의 부실 위험이 여전히 존재합니다.</p>',
+        insight:'<p><strong>[뉴욕 지점]</strong> 신규 CRE 여신은 철저히 보수적인 LTV 기준을 적용하고, 만기 도래 건에 대해서는 차주의 이자보상배율(ICR)을 엄격히 재평가해야 합니다. 안정적인 달러 유동성 확보를 위해 커미티드 라인(Committed Line)을 다변화하십시오.</p>',
+        weather: { icon: '☀️', temp: '28°C' }
+      },
+      {
+        h:'홍콩지점 (Hong Kong)', p:'아시아 IB 허브로서 신디케이트론 및 중화권 여신 확대',
+        detail:'<p>홍콩 지점은 아시아 지역의 핵심 IB 금융 허브 역할을 수행하고 있습니다. 최근 중국 부동산 리스크에 대비하여 우량 기업 위주로 포트폴리오를 재편하고, 신디케이트론 주선을 통해 수익 다변화를 도모하고 있습니다.</p>',
+        insight:'<p><strong>[홍콩 지점]</strong> 우량 차주 위주의 선별적 딜 참여를 통해 자산 건전성을 확보하고 비이자이익을 강화해야 합니다.</p>',
+        weather: { icon: '🌧️', temp: '29°C' }
+      },
+      {
+        h:'베트남 (Vietnam)', p:'호치민 및 하노이 지점의 FDI(외국인직접투자) 연계 영업 및 리테일 확장',
+        detail:'<p>베트남은 여전히 글로벌 공급망 재편의 핵심 수혜국입니다. 호치민과 하노이 지점은 한국계 진출 기업뿐만 아니라 우량 로컬 대기업(Vingroup 등)으로 거래망을 넓히고 있으며, 디지털 뱅킹 플랫폼(KB F@st)을 통한 리테일 고객 확보에 주력하고 있습니다.</p>',
+        insight:'<p><strong>[베트남 거점]</strong> 현지 진출 한국기업의 벤더(협력사)들을 타겟으로 한 공급망 금융(Supply Chain Finance) 상품을 특화하여 기업금융의 락인(Lock-in) 효과를 극대화해야 합니다.</p>',
+        weather: { icon: '⛈️', temp: '31°C' }
+      }
+    ],
+    subs: [
+      {
+        h:'PT Bank KB Indonesia Tbk (인도네시아)', p:'사명 변경을 통한 브랜드 정체성 강화 및 흑자 전환 가속화',
+        detail:'<p>과거 부코핀은행에서 최근 \'PT Bank KB Indonesia Tbk\'로 법인명을 변경하며 글로벌 브랜드 정체성을 확립했습니다. 자회사(부코핀 파이낸스 등) 매각과 선제적 NPL 정리를 통해 자산 건전성을 크게 개선했으며, 상반기 흑자 전환에 성공하며 경영 정상화에 속도를 내고 있습니다.</p>',
+        insight:'<p><strong>[경영 핵심 과제]</strong> 현지 우량 기업 중심의 선별적 여신 성장을 통해 자산의 질을 높이고, 한국계 대기업(현대차, LG에너지솔루션 등) 인도네시아 밸류체인과 연계한 특화 금융을 독점적으로 확보해야 합니다.</p>',
+        sources: [{title: 'KB Bank (Indonesia) 턴어라운드 및 사명 변경 공시', url:'#'}]
+      },
+      {
+        h:'KB 프라삭 은행 (캄보디아)', p:'상업은행 전환 이후 리테일·SME 시장 지배력 강화 및 통합 시너지 창출',
+        detail:'<p>KB 프라삭 은행은 기존 캄보디아 1위 마이크로파이낸스(MDI) 기업인 프라삭과 현지 KB국민은행 법인의 성공적인 합병을 통해 <strong>초대형 상업은행</strong>으로 출범했습니다. 탄탄한 소매금융 영업망을 바탕으로 저원가성 예금(CASA) 유치에 총력을 기울여 조달 비용을 획기적으로 낮추고 있습니다.</p>',
+        insight:'<p><strong>[경영 핵심 과제]</strong> MDI 시절의 소액 대출 중심에서 우량 중소기업(SME) 및 코퍼레이트 론으로 자산 포트폴리오를 빠르게 다변화해야 합니다. 모바일 뱅킹 앱 고도화를 통해 핵심 고객층인 2030 세대를 선점하십시오.</p>',
+        sources: [{title: 'KB PRASAC 경영실적 및 합병 시너지 보고서', url:'#'}]
+      }
+    ],
+    topics: [
+      {
+        h:'[ESG] 유럽 新 환경 규제 도입', p:'프랑크푸르트, 런던 지점의 현지 ESG 규제 대응 가이드라인 및 여신 심사 반영안',
+        detail:'<p>유럽연합(EU)의 공급망 실사법이 본격 발효됨에 따라, 주요 다국적 기업 고객들은 강력한 탄소 배출량 감축 및 인권 보호 의무를 지게 되었습니다.</p>',
+        insight:'<p>기업 여신 심사 시 차주의 재무적 요인뿐만 아니라 EU 기준에 부합하는 ESG 평가를 의무화해야 합니다.</p>',
+        sources: [{title: 'EU 공급망 실사법 가이드북', url:'#'}]
+      }
+    ],
+    trendHead:'글로벌 분석 요약',
+    trends:[
+      {b:'엔화 강세 = 신흥국 금리 선행지표',s:'JPY 강세는 신흥국 차입 비용 직결. 한국·인도네시아·필리핀 등 취약.'},
+      {b:'정책 불일치 = 자본 이동 심화',s:'Fed 관망, BOJ 인상 → 일본-미국 금리 격차 확대 → 쏠림 현상.'}
+    ],
+    coverageHead:'주간 현장 (KPI)',
+    kpis:[
+      {b:'미국 CRE',s:'연체율 1.2%\n모니터링 강화'},
+      {b:'KB 프라삭',s:'CASA 비중 ↑\n상업은행 연착륙'}
+    ],
+    repHead:'거점 현장의 한마디',
+    repNote:'주요 글로벌 네트워크의 생생한 목소리',
+    reporters:[
+      {flag:'🇺🇸',loc:'뉴욕',time:'01:00',ko:'"달러 조달 금리는 여전히 높습니다. CRE 시장은 우량 자산 위주로만 접근 중입니다."'},
+      {flag:'🇬🇧',loc:'런던',time:'02:15',ko:'"유럽의 ESG 규제가 예상보다 강합니다. 딜소싱 단계부터 철저히 필터링하고 있습니다."'}
+    ],
+    tabs:['글로벌 동향','현지언론 Intelligence','국외연결자회사','Topic Watch','규제·금융기관','참여 코너'],
+    tabIds:['brief','countries','subs','topics','regulations','participation'],
+    pulse:[
+      {icon:'⚡',label:'글로벌 동향',sub:'변동성 주의 · 에너지·환율'},
+      {icon:'🌧️',label:'진출국가',sub:'지역별 혼조 · 현지 정책 점검'},
+      {icon:'☁️',label:'국외연결자회사',sub:'금리·유동성·건전성 관찰'},
+      {icon:'☀️',label:'TopWatch',sub:'시장·경제·ESG · 디지털 기회'}
+    ],
+    footerText:'※ 2026년 6월 23일 기준 KB국민은행 글로벌/자회사 경영공시 및 자체 분석자료 기반.'
+  },
+  en: {
+    tagline:'KB GLOBAL INTELLIGENCE · ONE VISION CONNECTING FINANCIAL FLOWS',
+    date:'Tuesday, 23 June 2026',
+    sub:'Based on official data · 08:00 KST',
+    heroLabel:'WEEKLY FOCUS',
+    heroH:'JPY 146 Era Begins · Asia Finance Restructured',
+    heroP:'BOJ\'s explicit rate hike signal has pushed JPY from 145 to 146, triggering a fundamental restructuring of global rate systems.',
+    heroChips:['BOJ Hike Signal','JPY Surge','EM Credit Stress'],
+    focusLabel:'KB ACTIONS',
+    focusP:'① Emergency JPY exposure reassessment\n② EM credit monitoring enhancement',
+    bnEye:['This Week\'s Shock','This Week\'s Variable'],
+    bnDesc:['BI-Rate 5.75% ▲','Fed Rate 3.50-3.75%'],
+    bnCtx:['Indonesia BI\'s consecutive rate hikes pushing local rates sharply higher.','US Fed maintains rate hold supporting dollar strength.'],
+    sigHead:'4 Market Signals',
+    sigNote:'Click each card for detailed insights and full analysis.',
+    signals:[
+      {
+        n:'01', cat:'t-econ', label:'Market·Economy', h:'BOJ Rate Hike Signal', p:'JPY 145→146 surge reshaping global rate system',
+        detail:'<p>The BOJ has strongly hinted at a policy rate hike.</p>',
+        insight:'<p>Immediately reduce JPY exposure in global funding portfolios.</p>',
+        sources: [{title: 'BOJ Official Statement', url:'#'}]
+      }
+    ],
+    countries: [
+      {
+        h:'Tokyo, Japan', p:'Business opportunities amid BOJ normalization',
+        detail:'<p>End of negative rates opens new NIM recovery.</p>',
+        insight:'<p>Maintain strict credit screening against marginal firm defaults.</p>',
+        weather: { icon: '⛅', temp: '26°C' }
+      }
+    ],
+    subs: [
+      {
+        h:'PT Bank KB Indonesia Tbk', p:'Brand identity reinforcement and accelerated turnaround',
+        detail:'<p>Accelerated turnaround by offloading non-core subsidiaries.</p>',
+        insight:'<p>Improve asset quality via selective loan growth focusing on prime local firms.</p>',
+        sources: [{title: 'KB Bank ID Turnaround Status', url:'#'}]
+      }
+    ],
+    topics: [
+      {
+        h:'[ESG] New EU Regulations', p:'Compliance guidelines for London & Frankfurt',
+        detail:'<p>Strict supply chain and carbon emission laws require new credit assessment frameworks.</p>',
+        insight:'<p>Implement Green Finance Framework immediately.</p>',
+        sources: [{title: 'EU Supply Chain Act Guide', url:'#'}]
+      }
+    ],
+    trendHead:'Global Analysis',
+    trends:[
+      {b:'JPY Strength = EM Rate Indicator',s:'JPY surge directly impacts EM borrowing costs.'}
+    ],
+    coverageHead:'Weekly Coverage',
+    kpis:[
+      {b:'US CRE',s:'NPL 1.2%\nMonitor↑'}
+    ],
+    repHead:'Field Voices',
+    repNote:'Live reports from global networks',
+    reporters:[
+      {flag:'🇺🇸',loc:'New York',time:'01:00',ko:'...',en:'"USD funding costs high. Only engaging prime CRE assets."'}
+    ],
+    tabs:['Global Macro','Local Media Intel','Subsidiaries','Topic Watch','Regulators','Engagement'],
+    tabIds:['brief','countries','subs','topics','regulations','participation'],
+    pulse:[
+      {icon:'⚡',label:'Global Macro',sub:'Volatility Alert · Energy & FX'},
+      {icon:'🌧️',label:'Locations',sub:'Mixed Regions · Policy Check'},
+      {icon:'☁️',label:'Subsidiaries',sub:'Rates · Liquidity · Soundness'},
+      {icon:'☀️',label:'TopWatch',sub:'Macro · ESG · Digital Growth'}
+    ],
+    footerText:'※ KB Global Intelligence based on official data.'
+  }
+};
+
+
+/* Local media-first country intelligence. Show only material articles; no forced daily item. */
+const COUNTRY_MEDIA=[
+ {flag:'🇬🇧',n:{ko:'런던',en:'London'},s:'Financial Times · The Banker · City A.M.',a:[]},
+ {flag:'🇺🇸',n:{ko:'뉴욕',en:'New York'},s:'The Wall Street Journal · American Banker · Bloomberg',a:[]},
+ {flag:'🇯🇵',n:{ko:'동경',en:'Tokyo'},s:'Nikkei · The Japan Times',a:[]},
+ {flag:'🇭🇰',n:{ko:'홍콩',en:'Hong Kong'},s:'South China Morning Post · Hong Kong Economic Journal',a:[]},
+ {flag:'🇸🇬',n:{ko:'싱가포르',en:'Singapore'},s:'The Business Times · The Straits Times',a:[
+   {c:'esg risk',b:{ko:'ESG · 리스크',en:'ESG · RISK'},src:'The Business Times',d:'2026.06.12',
+    t:{ko:'동남아 재생에너지 자산의 기후리스크가 전환금융 판단에 미치는 영향',en:'Climate risk in Southeast Asian renewables reshapes transition-finance assumptions'},
+    q:{ko:'현지 주요 경제지는 동남아 재생에너지 자산의 물리적 기후위험과 ESG 금융 역량 변화가 금융기관의 전환금융 판단에 영향을 줄 수 있다고 분석했습니다.',en:'Local business coverage highlights climate exposure of Southeast Asian renewable assets and changing ESG capacity relevant to transition finance.'},
+    k:{ko:'지속가능금융은 성장성만이 아니라 기후 시나리오·담보가치·보험 가능성을 함께 검증해야 합니다.',en:'Sustainable finance should pair growth cases with climate scenarios, collateral resilience and insurability.'},
+    u:'https://www.businesstimes.com.sg/newsletters/esg-insights/issue-198-ubs-cuts-asia-esg-staff-s-e-asian-renewables-assets-face-high-climate-risk'}]},
+ {flag:'🇨🇳',n:{ko:'중국',en:'China'},s:'Caixin Global · Yicai',a:[
+   {c:'finance risk',b:{ko:'금융 · 리스크',en:'FINANCE · RISK'},src:'Caixin Global',d:'2026.06.22',
+    t:{ko:'공급망금융 규제 정비가 지방정부 지급지연 리스크를 드러냄',en:'Supply-chain finance overhaul exposes local-debt payment risk'},
+    q:{ko:'Caixin은 전자채권 기반 공급망금융 규칙 강화가 지방정부 지급지연과 협력사 자금경색 문제를 부각한다고 보도했습니다.',en:'Caixin reports that tighter electronic-IOU supply-chain-finance rules expose unpaid local-government bills and supplier funding pressure.'},
+    k:{ko:'중국 거래기업의 매출채권·지급조건·핵심 공급망 익스포저를 함께 점검할 필요가 있습니다.',en:'Review receivables, payment terms and key supply-chain exposure of China-linked borrowers together.'},
+    u:'https://www.caixinglobal.com/2026-06-22/china-advances-overhaul-of-supply-chain-finance-market-102456296.html'},
+   {c:'risk',b:{ko:'규제 · 리스크',en:'REGULATION · RISK'},src:'Caixin Global',d:'2026.06.18',
+    t:{ko:'중국 금융당국, 은행·보험법 개정과 국경간 리스크 대응 강화 예고',en:'China signals banking and insurance law revision with cross-border risk focus'},
+    q:{ko:'중국 금융감독당국은 은행·보험 법 개정과 국제 규제협력을 통해 국경간 금융리스크 대응을 강화하겠다고 밝혔습니다.',en:'China’s top financial regulator said it will accelerate banking and insurance law revisions and strengthen international cooperation on cross-border risk.'},
+    k:{ko:'현지 파트너·자금조달·데이터 및 리스크관리 체계에 대한 규제영향을 선제 검토해야 합니다.',en:'Assess implications for local partners, funding, data and risk-control frameworks early.'},
+    u:'https://www.caixinglobal.com/2026-06-18/china-to-speed-up-banking-insurance-law-revisions-amid-cross-border-risk-concerns-102455196.html'}]},
+ {flag:'🇻🇳',n:{ko:'베트남',en:'Vietnam'},s:'VnExpress International · Vietnam Investment Review',a:[]},
+ {flag:'🇮🇳',n:{ko:'인도',en:'India'},s:'Mint · The Economic Times',a:[
+   {c:'finance esg',b:{ko:'금융 · ESG',en:'FINANCE · ESG'},src:'Mint',d:'2026.04.13',
+    t:{ko:'ESG 데이터가 인도 기업대출의 신용판단에 미치는 영향 확대',en:'ESG data becomes a material input to India credit decisions'},
+    q:{ko:'Mint는 ESG 데이터가 재무·담보·상환이력과 함께 차주 리스크를 판단하는 요소로 자리 잡고 있으며, MSME의 데이터 준비 수준이 중요해지고 있다고 설명했습니다.',en:'Mint explains ESG data is becoming a lending input alongside financials, collateral and repayment history, with data readiness increasingly material for MSMEs.'},
+    k:{ko:'ESG 정보의 충실도와 공급망·환경 리스크를 신용심사·사후관리 항목에 단계적으로 반영할 필요가 있습니다.',en:'Progressively incorporate ESG-data quality, supply-chain and environmental risk into underwriting and monitoring.'},
+    u:'https://www.livemint.com/money/personal-finance/esg-data-is-reshaping-indias-credit-decisions-what-borrowers-must-know-rbi-msmes-11776067478907.html'}]},
+ {flag:'🇲🇲',n:{ko:'미얀마',en:'Myanmar'},s:'Frontier Myanmar · Myanmar Now',a:[]},
+ {flag:'🇳🇿',n:{ko:'오클랜드',en:'Auckland'},s:'BusinessDesk · NZ Herald Business',a:[]}
+];
+const mt=v=>typeof v==='object'?(v[LANG]||v.ko||v.en||''):(v||'');
+function renderCountryMedia(filter='all'){
+ const feed=document.getElementById('localMediaFeed'); if(!feed)return;
+ const articles=COUNTRY_MEDIA.flatMap(x=>x.a.map(a=>({...a,n:x.n,f:x.flag}))).filter(a=>filter==='all'||a.c.includes(filter));
+ feed.innerHTML=articles.length?articles.map(a=>`<article class="media-article"><div class="media-top"><span>${a.f} <b>${mt(a.n)}</b></span><i>${mt(a.b)}</i></div><div class="media-source">${a.src} · ${a.d}</div><h3>${mt(a.t)}</h3><p>${mt(a.q)}</p><div class="media-insight"><b>${LANG==='ko'?'KB 시사점':'KB IMPLICATION'}</b><span>${mt(a.k)}</span></div><a href="${a.u}" target="_blank" rel="noopener">${LANG==='ko'?'원문 보기':'Read original'} <em>↗</em></a></article>`).join(''):`<div class="media-empty">${LANG==='ko'?'선택한 분류의 유의미한 신규 기사가 없습니다. 소스 모니터링은 유지합니다.':'No material new item in this category. Source monitoring remains active.'}</div>`;
+}
+function bindMediaFilters(){const x=document.getElementById('mediaFilters');if(!x)return;x.onclick=e=>{const b=e.target.closest('button[data-f]');if(!b)return;x.querySelectorAll('button').forEach(z=>z.classList.remove('active'));b.classList.add('active');renderCountryMedia(b.dataset.f)}}
+
+function setLang(l){LANG=l;document.getElementById('btnKo').classList.toggle('on',l==='ko');document.getElementById('btnEn').classList.toggle('on',l==='en');renderHeader();buildClocks();renderPulse();buildTicker();renderNav();renderBrief();renderCountries();renderSubs();renderTopics();renderRegulations();renderParticipation();}
+function tx(ko,en){return LANG==='ko'?ko:en;}
+
+function buildClocks(){const el=document.getElementById('clockStrip');if(!el)return;const tzs=[{flag:'🇬🇧',city:{ko:'런던',en:'London'},tz:'Europe/London'},{flag:'🇺🇸',city:{ko:'뉴욕',en:'New York'},tz:'America/New_York'},{flag:'🇯🇵',city:{ko:'동경',en:'Tokyo'},tz:'Asia/Tokyo'},{flag:'🇸🇬',city:{ko:'싱가포르',en:'Singapore'},tz:'Asia/Singapore'}];const fmt=t=>{try{return new Date().toLocaleTimeString('ko-KR',{timeZone:t,hour:'2-digit',minute:'2-digit',hour12:false})}catch(e){return '--:--'}};el.innerHTML=tzs.map(c=>`<div class="clk"><span class="clk-flag">${c.flag}</span><div><span class="clk-city">${LANG==='ko'?c.city.ko:c.city.en}</span><span class="clk-time">${fmt(c.tz)}</span></div></div>`).join('');}
+setInterval(buildClocks, 15000);
+
+function renderHeader(){const t=TX[LANG];document.getElementById('hTagline').textContent=t.tagline;document.getElementById('hDate').textContent=t.date;document.getElementById('hSub').textContent=t.sub;document.getElementById('footerText').textContent=t.footerText;}
+function renderPulse(){const el=document.getElementById('pulseStrip');if(!el)return;el.innerHTML=TX[LANG].pulse.map(p=>`<div class="pulse-card"><div class="pc-icon">${p.icon}</div><div><div class="pc-label">${p.label}</div><div class="pc-sub">${p.sub}</div></div></div>`).join('');}
+function buildTicker(){const items=[{b:'BOJ',text:{ko:'정책금리 인상신호 강화 · 엔화 146 돌파',en:'Rate hike signal · JPY 146 breakthrough'}},{b:'FED',text:{ko:'3.50-3.75% 유지 · 달러 조달비용 모니터링',en:'3.50-3.75% hold · USD funding costs monitor'}}];const inner=document.getElementById('tickerInner');if(!inner)return;const h=items.map(x=>`<span class="ticker-item"><b>${x.b}</b>${tx(x.text.ko,x.text.en)}</span>`).join('');inner.innerHTML=h+h;}
+
+function renderNav(){const t=TX[LANG];const el=document.getElementById('mainNav');if(!el)return;el.innerHTML=t.tabs.map((tab,i)=>`<button class="${i===0?'active':''}" data-page="${t.tabIds[i]}">${tab}</button>`).join('');el.onclick=e=>{if(e.target.tagName!=='BUTTON')return;el.querySelectorAll('button').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+e.target.dataset.page).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});};}
+
+function renderBrief(){
+  const t=TX[LANG];const el=document.getElementById('page-brief');if(!el)return;
+  const sigH=t.signals.map((s,i)=>`<article class="signal" onclick="showModal('brief',${i})"><div class="sig-num">${s.n}</div><span class="tag ${s.cat}">${s.label}</span><h3 class="sig-h">${s.h}</h3><p class="sig-p">${s.p}</p></article>`).join('');
+  const repH=t.reporters.map(r=>`<div class="rep-card"><div class="rep-top"><span class="rep-flag">${r.flag}</span><span class="rep-loc">${tx(r.loc,r.loc)}</span><span class="rep-time">${r.time}</span></div><p class="rep-quote">${tx(r.ko,r.en)}</p></div>`).join('');
+  el.innerHTML=`<div class="hero"><div class="hero-main"><div class="hero-label">${t.heroLabel}</div><h1 class="hero-h">${t.heroH}</h1><p class="hero-p">${t.heroP}</p><div class="hero-chips">${t.heroChips.map(c=>`<span class="chip">${c}</span>`).join('')}</div></div><div class="hero-focus"><div class="hero-focus-label">${t.focusLabel}</div><p>${t.focusP.split('\n').join('<br>')}</p></div></div><div class="bignum"><div class="bn-card"><div class="bn-eye">${t.bnEye[0]}</div><div class="bn-num">5.75%</div><div class="bn-desc">${t.bnDesc[0]}</div><div class="bn-ctx">${t.bnCtx[0]}</div></div><div class="bn-card navy"><div class="bn-eye">${t.bnEye[1]}</div><div class="bn-num" style="color:#2A5298">3.50–3.75%</div><div class="bn-desc">${t.bnDesc[1]}</div><div class="bn-ctx">${t.bnCtx[1]}</div></div></div><div class="sh"><h2>${t.sigHead}</h2><span class="note">${t.sigNote}</span></div><div class="signals">${sigH}</div><div class="twocol"><section class="panel"><h2>${t.trendHead}</h2><div>${t.trends.map(tr=>`<div class="trend"><b>${tr.b}</b><span>${tr.s}</span></div>`).join('')}</div></section><section class="panel"><h2>${t.coverageHead}</h2><div class="kpi">${t.kpis.map(k=>`<div class="kpi-cell"><b>${k.b}</b><span>${k.s.split('\n').join('<br>')}</span></div>`).join('')}</div></section></div><div class="sh"><h2>${t.repHead}</h2><span class="note">${t.repNote}</span></div><div class="reporter">${repH}</div>`;
+}
+
+function renderCountries(){
+  const el=document.getElementById('page-countries');if(!el)return;
+  const coverage=COUNTRY_MEDIA.map(x=>`<article class="coverage-card ${x.a.length?'on':''}"><div><b>${x.flag} ${mt(x.n)}</b><span>${x.a.length?(LANG==='ko'?'ACTIVE':'ACTIVE'):(LANG==='ko'?'SOURCE WATCH':'SOURCE WATCH')}</span></div><p>${x.s}</p><small>${x.a.length?`${x.a.length} ${LANG==='ko'?'건 분석':'article(s) analysed'}`:(LANG==='ko'?'유의미 기사 선별 대기':'Awaiting material article')}</small></article>`).join('');
+  el.innerHTML=`<section class="media-hero"><div class="media-kicker">LOCAL MEDIA INTELLIGENCE</div><h2>${LANG==='ko'?'진출국가 · 현지 주요언론 Intelligence':'Market Intelligence from Local Leading Media'}</h2><p>${LANG==='ko'?'사내 리포트 중심이 아니라 현지 주요언론의 금융·디지털·ESG·금융사고/리스크 기사를 선별합니다. 각 기사에는 핵심 요약, KB 시사점, 원문 링크를 함께 제공합니다.':'Rather than relying on internal reports, this view curates material finance, digital, ESG and incident/risk stories from leading local media, with a concise summary, KB implication and original link.'}</p><div class="media-rule"><b>${LANG==='ko'?'운영 원칙':'OPERATING RULE'}</b><span>${LANG==='ko'?'유의미한 기사만 노출하고, 기사 없는 국가는 SOURCE WATCH로 관리':'Show only material stories; keep other markets in SOURCE WATCH.'}</span></div></section><div class="media-filters" id="mediaFilters"><button class="active" data-f="all">${LANG==='ko'?'전체':'All'}</button><button data-f="finance">${LANG==='ko'?'금융':'Finance'}</button><button data-f="digital">${LANG==='ko'?'디지털':'Digital'}</button><button data-f="esg">ESG</button><button data-f="risk">${LANG==='ko'?'금융사고·리스크':'Incident · Risk'}</button></div><div class="media-feed" id="localMediaFeed"></div><div class="coverage-head"><span>COUNTRY SOURCE COVERAGE</span><h2>${LANG==='ko'?'10개 진출국가 현지 언론 소스 커버리지':'Local-media source coverage across 10 markets'}</h2><p>${LANG==='ko'?'경영 영향이 있는 기사만 본문으로 승격합니다.':'Only management-relevant stories are promoted into the daily feed.'}</p></div><div class="coverage-grid">${coverage}</div>`;
+  bindMediaFilters();renderCountryMedia('all');
+}
+
+function renderSubs(){
+  const t=TX[LANG]; const el=document.getElementById('page-subs');if(!el)return;
+  const cards = t.subs.map((c, i) => `<div class="sp-card" onclick="showModal('sub', ${i})"><div><h3 style="font-size:16.5px;letter-spacing:-0.5px;color:var(--blue-dk)">🏢 ${c.h}</h3><p style="color:var(--body);font-weight:500;">${c.p}</p></div><div style="margin-top:16px; font-size:11px; color:var(--gold-dk); font-weight:bold; letter-spacing:0.05em;">경영실적·인사이트 ➔</div></div>`).join('');
+  el.innerHTML=`<h2>국외연결자회사 (현지법인) 핵심 동향</h2><p style="color:var(--muted); font-size:13px; margin-top:5px; margin-bottom:20px;">각 자회사 카드를 클릭하여 턴어라운드 및 성장 전략을 확인하세요.</p><div class="subpage-grid">${cards}</div>`;
+}
+
+function renderTopics(){
+  const t=TX[LANG]; const el=document.getElementById('page-topics');if(!el)return;
+  const cards = t.topics.map((c, i) => `<div class="sp-card" onclick="showModal('topic', ${i})"><div><h3>📚 ${c.h}</h3><p>${c.p}</p></div><div style="margin-top:16px; font-size:11px; color:var(--gold-dk); font-weight:bold;">리포트 열람 ➔</div></div>`).join('');
+  el.innerHTML=`<h2>주제별 심층 리포트 (Topic Watch)</h2><p style="color:var(--muted); font-size:13px; margin-top:5px; margin-bottom:20px;">주제를 클릭하여 풀버전 요약을 확인하세요.</p><div class="subpage-grid">${cards}</div>`;
+}
+
+function renderRegulations(){
+  const el=document.getElementById('page-regulations');if(!el)return;
+  el.innerHTML=`<h2>🏛️ 규제 · 금융기관 동향</h2><p style="color:var(--muted); font-size:13px; margin-top:5px;">글로벌 금융당국 규제 정보 및 유관기관 협력 소식이 업데이트될 예정입니다.</p>`;
+}
+
+function renderParticipation(){
+  const el=document.getElementById('page-participation');if(!el)return;
+  el.innerHTML=`<h2>📢 참여 코너</h2><p style="color:var(--muted); font-size:13px; margin-top:5px;">글로벌 거점 임직원 제안 및 글로벌 원팀 커뮤니티 공간이 오픈될 예정입니다.</p>`;
+}
+
+function showModal(type,idx){
+  const t=TX[LANG]; let data = null; let tagText = '';
+  if(type === 'brief') { data = t.signals[idx]; tagText = data.label; }
+  else if(type === 'country') { data = t.countries[idx]; tagText = LANG==='ko'?'국가별 영업 현안':'Regional Analysis'; }
+  else if(type === 'sub') { data = t.subs[idx]; tagText = LANG==='ko'?'자회사 경영 진단':'Subsidiary Insight'; }
+  else if(type === 'topic') { data = t.topics[idx]; tagText = LANG==='ko'?'주제별 인사이트':'Topic Insight'; }
+
+  if(data) {
+    document.getElementById('modal-tag').textContent = tagText;
+    document.getElementById('modal-title').textContent = data.h;
+    document.getElementById('modal-detail').innerHTML = `<div class="modal-detail">${data.detail}</div>`;
+    document.getElementById('modal-insight').innerHTML = `<div class="modal-insight"><div class="modal-insight-title">💡 Global One Team Insight (액션플랜)</div>${data.insight}</div>`;
+    let sourcesHtml = '';
+    if(data.sources && data.sources.length > 0) {
+      sourcesHtml = data.sources.map(s => `<div class="source-item"><span class="source-icon">📄</span><a href="${s.url}" target="_blank">${s.title}</a></div>`).join('');
+    } else { sourcesHtml = `<div class="source-item" style="color:var(--muted); font-size:12px;">사내 인텔리전스 통합 리포트 (추가 링크 없음)</div>`; }
+    document.getElementById('modal-sources').innerHTML = sourcesHtml;
+    document.getElementById('modal').classList.add('on');
+  }
+}
+function closeModal(){document.getElementById('modal').classList.remove('on');}
+
+// Init
+buildClocks();renderHeader();renderPulse();buildTicker();renderNav();renderBrief();renderCountries();renderSubs();renderTopics();renderRegulations();renderParticipation();
+</script>
+</body>
+</html>
